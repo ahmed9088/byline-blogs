@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  
+  --color-editorial-accent: var(--editorial-accent);
+  --color-editorial-gold: #fbbf24;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #09090b;
+  --editorial-accent: #4f46e5; /* Premium Clean Indigo */
+  --editorial-accent-light: #e0e7ff;
+}
+
+/* Dark mode overrides */
+.dark-mode {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --editorial-accent: #6366f1;
+  --editorial-accent-light: #1e1b4b;
+}
+
+/* Dynamic Accent Presets */
+.preset-billboard {
+  --editorial-accent: #09090b;
+  --editorial-accent-light: #f4f4f5;
+}
+.dark-mode.preset-billboard {
+  --editorial-accent: #f4f4f5;
+  --editorial-accent-light: #09090b;
+}
+
+.preset-insider {
+  --editorial-accent: #9333ea;
+  --editorial-accent-light: #f3e8ff;
+}
+.dark-mode.preset-insider {
+  --editorial-accent: #a855f7;
+  --editorial-accent-light: #3b0764;
+}
+
+.preset-people {
+  --editorial-accent: #0284c7;
+  --editorial-accent-light: #e0f2fe;
+}
+.dark-mode.preset-people {
+  --editorial-accent: #38bdf8;
+  --editorial-accent-light: #0c4a6e;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Dotted Grid Background Pattern */
+.bg-grid-dots {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark-mode .bg-grid-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Background blob animations */
+@keyframes blob-float {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+.animate-blob {
+  animation: blob-float 10s infinite alternate ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Scrollbar tweaks */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+}
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Clean, crisp article body font */
+.serif-article-body {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.8;
+  letter-spacing: -0.01em;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+  white-space: nowrap;
+}
+
+/* Article image hover zoom */
+.serif-article-body img {
+  border-radius: 1rem;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: zoom-in;
+}
+.serif-article-body img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+/* Code block support */
+.serif-article-body pre {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Smooth link hover */
+.serif-article-body a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+/* Animated selection highlight */
+::selection {
+  background: var(--editorial-accent);
+  color: white;
+}
+
+/* Focus ring consistency */
+:focus-visible {
+  outline: 2px solid var(--editorial-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Card tilt micro-interaction */
+.card-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+.card-tilt:hover {
+  transform: perspective(600px) rotateX(1deg) rotateY(-1deg) translateY(-2px);
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+}
+.dark .skeleton-shimmer {
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+}

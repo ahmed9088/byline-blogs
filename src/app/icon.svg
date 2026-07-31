@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+  <defs>
+    <linearGradient id="bg-grad-fav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <linearGradient id="gold-grad-fav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+
+    <linearGradient id="indigo-grad-fav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="120" height="120" rx="30" fill="url(#bg-grad-fav)"/>
+  <rect x="6" y="6" width="108" height="108" rx="24" stroke="url(#indigo-grad-fav)" stroke-width="2" stroke-opacity="0.4"/>
+
+  <g transform="translate(24, 22)">
+    <rect x="14" y="10" width="8" height="56" rx="4" fill="url(#gold-grad-fav)"/>
+    <path d="M 22 10 H 42 C 54 10 60 17 60 25 C 60 33 54 40 42 40 H 22 V 10 Z" 
+          fill="none" stroke="url(#gold-grad-fav)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 22 40 H 46 C 58 40 65 47 65 56 C 65 65 58 72 46 72 H 22 V 40 Z" 
+          fill="none" stroke="url(#gold-grad-fav)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 6 28 L -4 38 L 6 48" 
+          fill="none" stroke="url(#indigo-grad-fav)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 66 28 L 76 38 L 66 48" 
+          fill="none" stroke="url(#indigo-grad-fav)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="28" cy="40" r="3.5" fill="#ffffff"/>
+  </g>
+</svg>
