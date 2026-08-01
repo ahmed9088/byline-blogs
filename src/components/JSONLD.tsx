@@ -5,7 +5,39 @@ import React from 'react';
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
   (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
 
-// 1. Article / BlogPosting Schema.org JSON-LD
+// 1. Organization Schema.org JSON-LD
+export function OrganizationJSONLD() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "Bylines.dev",
+    "alternateName": "Bylines.dev Journal",
+    "url": BASE_URL,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${BASE_URL}/icon.svg`,
+      "width": 512,
+      "height": 512
+    },
+    "sameAs": [
+      "https://twitter.com/bylines_dev",
+      "https://github.com/bylines-dev"
+    ],
+    "publishingPrinciples": `${BASE_URL}/about`,
+    "diversityPolicy": `${BASE_URL}/about`,
+    "ethicsPolicy": `${BASE_URL}/about`,
+    "correctionsPolicy": `${BASE_URL}/about`
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// 2. Article / NewsArticle Schema.org JSON-LD
 interface ArticleJSONLDProps {
   headline: string;
   description: string;
@@ -30,8 +62,8 @@ export function ArticleJSONLD({
   dateModified,
   authorName,
   authorUrl,
-  publisherName = "Bylines Dev Journal",
-  publisherLogo = "https://bylines.dev/logo.png",
+  publisherName = "Bylines.dev Journal",
+  publisherLogo = `${BASE_URL}/icon.svg`,
   section,
   keywords,
 }: ArticleJSONLDProps) {
@@ -73,7 +105,7 @@ export function ArticleJSONLD({
   );
 }
 
-// 2. BreadcrumbList Schema.org JSON-LD
+// 3. BreadcrumbList Schema.org JSON-LD
 interface BreadcrumbItem {
   name: string;
   url: string;
@@ -87,7 +119,7 @@ export function BreadcrumbJSONLD({ items }: { items: BreadcrumbItem[] }) {
       "@type": "ListItem",
       "position": idx + 1,
       "name": item.name,
-      "item": item.url,
+      "item": item.url.startsWith('http') ? item.url : `${BASE_URL}${item.url}`,
     })),
   };
 
@@ -99,13 +131,13 @@ export function BreadcrumbJSONLD({ items }: { items: BreadcrumbItem[] }) {
   );
 }
 
-// 3. WebSite & Sitelinks SearchBox Schema.org JSON-LD
+// 4. WebSite & Sitelinks SearchBox Schema.org JSON-LD
 export function WebSiteJSONLD() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Bylines.dev",
-    "alternateName": "Bylines Dev — Editorial Technical Publishing",
+    "alternateName": "Bylines Dev — Technical & Editorial Publishing",
     "url": BASE_URL,
     "potentialAction": {
       "@type": "SearchAction",
@@ -125,7 +157,7 @@ export function WebSiteJSONLD() {
   );
 }
 
-// 4. CollectionPage / Category Schema.org JSON-LD
+// 5. CollectionPage / Category Schema.org JSON-LD
 interface CollectionPageJSONLDProps {
   name: string;
   description: string;
@@ -138,7 +170,7 @@ export function CollectionPageJSONLD({ name, description, url }: CollectionPageJ
     "@type": "CollectionPage",
     "name": name,
     "description": description,
-    "url": url,
+    "url": url.startsWith('http') ? url : `${BASE_URL}${url}`,
     "isPartOf": {
       "@type": "WebSite",
       "name": "Bylines.dev",
@@ -153,3 +185,4 @@ export function CollectionPageJSONLD({ name, description, url }: CollectionPageJ
     />
   );
 }
+

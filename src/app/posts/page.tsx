@@ -1,5 +1,23 @@
 import React, { Suspense } from 'react';
+import type { Metadata } from 'next';
 import BlogListing from '../../components/BlogListing';
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
+  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+
+export const metadata: Metadata = {
+  title: 'All Publications & Technical Essays',
+  description: 'Explore the complete archive of technical essays, engineering papers, research reports, and editorial coverage on Bylines.dev.',
+  alternates: {
+    canonical: `${BASE_URL}/posts`,
+  },
+  openGraph: {
+    title: 'All Publications & Technical Essays | Bylines.dev',
+    description: 'Explore the complete archive of technical essays, engineering papers, research reports, and editorial coverage on Bylines.dev.',
+    url: `${BASE_URL}/posts`,
+    type: 'website',
+  },
+};
 
 export default function PostsPage() {
   return (

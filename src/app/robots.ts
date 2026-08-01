@@ -13,11 +13,11 @@ export default function robots(): MetadataRoute.Robots {
           '/admin',
           '/admin/*',
           '/api/*',
-          '/feed',
           '/profile',
           '/bookmarks',
           '/login',
           '/register',
+          '/unsubscribe',
         ],
       },
       {
@@ -25,11 +25,22 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: [
           '/admin/*',
-          '/feed',
+          '/api/*',
+          '/profile',
+          '/bookmarks',
+        ],
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: [
+          '/admin/*',
+          '/api/*',
           '/profile',
         ],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
+    host: BASE_URL,
   };
 }

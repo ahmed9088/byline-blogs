@@ -5,7 +5,7 @@ import { ThemeProvider } from "../context/ThemeContext";
 import { AuthProvider } from "../context/AuthContext";
 import { ToastProvider } from "../context/ToastContext";
 import ClientLayoutWrapper from "../components/ClientLayoutWrapper";
-import { WebSiteJSONLD } from "../components/JSONLD";
+import { WebSiteJSONLD, OrganizationJSONLD } from "../components/JSONLD";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -47,6 +47,7 @@ export const metadata: Metadata = {
   description: "Expert-driven engineering papers, technical journalism, and research reports covering systems architecture, AI models, neuroscience, cybersecurity, and modern design.",
   keywords: [
     "bylines dev",
+    "bylines.dev",
     "systems engineering",
     "artificial intelligence",
     "modern design",
@@ -55,10 +56,15 @@ export const metadata: Metadata = {
     "neuroscience",
     "technical essays",
     "developer journalism",
+    "tech publishing",
   ],
   authors: [{ name: "Bylines.dev Editorial Board", url: "https://bylines.dev" }],
   creator: "Bylines.dev Journal",
   publisher: "Bylines.dev Media",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
+  },
   robots: {
     index: true,
     follow: true,
@@ -96,6 +102,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://bylines.dev",
+    types: {
+      "application/rss+xml": "https://bylines.dev/feed.xml",
+    },
   },
   icons: {
     icon: "/favicon.ico",
@@ -118,7 +127,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="alternate" type="application/rss+xml" title="Bylines.dev RSS Feed" href="https://bylines.dev/feed.xml" />
         <WebSiteJSONLD />
+        <OrganizationJSONLD />
       </head>
       <body className="min-h-full flex flex-col bg-grid-dots">
         <script

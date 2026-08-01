@@ -1,13 +1,32 @@
 import React from "react";
+import type { Metadata } from "next";
 import SEOHead from "../../components/SEOHead";
 import Breadcrumbs from "../../components/Breadcrumbs";
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
+  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "https://bylines.dev");
+
+export const metadata: Metadata = {
+  title: "About Us — Bylines.dev Journal",
+  description: "Learn about the mission, editorial standards, and truth & transparency guidelines of Bylines.dev.",
+  alternates: {
+    canonical: `${BASE_URL}/about`,
+  },
+  openGraph: {
+    title: "About Us — Bylines.dev Journal",
+    description: "Learn about the mission, editorial standards, and truth & transparency guidelines of Bylines.dev.",
+    url: `${BASE_URL}/about`,
+    type: "website",
+  },
+};
 
 export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto py-4 space-y-8 px-4">
       <SEOHead
         title="About Us"
-        description="Learn about the mission, history, and standards of Byline."
+        description="Learn about the mission, history, and standards of Bylines.dev."
+        url={`${BASE_URL}/about`}
       />
 
       <div className="flex flex-col gap-1">
@@ -17,7 +36,7 @@ export default function AboutPage() {
             Who We Are
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold font-serif leading-tight text-neutral-900 dark:text-neutral-50 max-w-xl mx-auto tracking-tight">
-            About Byline
+            About Bylines.dev
           </h1>
           <p className="text-xs text-neutral-550 dark:text-neutral-400 uppercase tracking-widest font-sans font-bold">
             Est. 2026 — Independent Journalism
@@ -27,7 +46,7 @@ export default function AboutPage() {
 
       <div className="prose dark:prose-invert font-sans text-xs leading-relaxed space-y-6 text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto pt-6 border-t border-neutral-150 dark:border-neutral-900">
         <p>
-          Founded on the core values of independence and high-fidelity reporting, <strong>Byline</strong> serves as a premium publishing platform. We cover topics in modern literature, science, design principles, technology, and business, keeping our text focused on quality reading and intellectual depth.
+          Founded on the core values of independence and high-fidelity reporting, <strong>Bylines.dev</strong> serves as a premium publishing platform. We cover topics in modern literature, science, design principles, technology, and business, keeping our text focused on quality reading and intellectual depth.
         </p>
 
         <p className="border-l-2 border-editorial-accent pl-5 italic text-sm my-8 text-neutral-800 dark:text-neutral-350 font-serif leading-relaxed">
