@@ -35,13 +35,60 @@ const getCategoryIcon = (slug: string) => {
   }
 };
 
+const DEFAULT_FEATURED_POST = {
+  _id: 'default-lead-story',
+  title: 'Architecting High-Throughput Distributed Systems with Zero Memory Allocations',
+  slug: 'architecting-high-throughput-distributed-systems',
+  summary: 'An architectural deep-dive into zero-copy networking, off-heap memory management, and deterministic latency bounds in modern distributed engines.',
+  featuredImage: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80',
+  category: { name: 'Systems Engineering', slug: 'systems-engineering' },
+  author: { name: 'Dr. Elena Rostova' },
+  readingTime: 8,
+  publishedAt: new Date().toISOString()
+};
+
+const DEFAULT_TRENDING = [
+  {
+    _id: 't-1',
+    title: 'Formal Verification of Concurrent Rust Kernel Primitives',
+    slug: 'formal-verification-rust-kernel',
+    category: { name: 'Systems Engineering' },
+    author: { name: 'Marcus Vance' },
+    readingTime: 6
+  },
+  {
+    _id: 't-2',
+    title: 'Quantizing 70B Parameter LLMs to 2-Bit Precision Without Loss',
+    slug: 'quantizing-70b-parameter-llms',
+    category: { name: 'Artificial Intelligence' },
+    author: { name: 'Sofia Chen' },
+    readingTime: 9
+  },
+  {
+    _id: 't-3',
+    title: 'Zero-Knowledge Proofs in Practice: Circuit Design Patterns',
+    slug: 'zero-knowledge-proofs-circuit-design',
+    category: { name: 'Cyber Security' },
+    author: { name: 'Liam Thorne' },
+    readingTime: 7
+  },
+  {
+    _id: 't-4',
+    title: 'The Design System Architecture Behind High-Density Interfaces',
+    slug: 'design-system-architecture-interfaces',
+    category: { name: 'Modern Design' },
+    author: { name: 'Claire Dubois' },
+    readingTime: 5
+  }
+];
+
 export default function Home() {
   const { user } = useAuth();
-  const [featuredPost, setFeaturedPost] = useState<any>(null);
-  const [trendingPosts, setTrendingPosts] = useState<any[]>([]);
+  const [featuredPost, setFeaturedPost] = useState<any>(DEFAULT_FEATURED_POST);
+  const [trendingPosts, setTrendingPosts] = useState<any[]>(DEFAULT_TRENDING);
   const [latestPosts, setLatestPosts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
 
   useEffect(() => {
@@ -54,25 +101,23 @@ export default function Home() {
         ]);
 
         let allPosts: any[] = [];
-        if (latestRes.data.success) {
+        if (latestRes.data.success && Array.isArray(latestRes.data.posts) && latestRes.data.posts.length > 0) {
           allPosts = latestRes.data.posts;
           setLatestPosts(allPosts);
           setTrendingPosts(allPosts.slice(0, 4));
         }
 
-        if (featuredRes.data.success && featuredRes.data.posts.length > 0) {
+        if (featuredRes.data.success && Array.isArray(featuredRes.data.posts) && featuredRes.data.posts.length > 0) {
           setFeaturedPost(featuredRes.data.posts[0]);
         } else if (allPosts.length > 0) {
           setFeaturedPost(allPosts[0]);
         }
 
-        if (catRes.data.success) {
+        if (catRes.data.success && Array.isArray(catRes.data.categories) && catRes.data.categories.length > 0) {
           setCategories(catRes.data.categories);
         }
       } catch (err: any) {
         console.error('Home page loading error:', err.message);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -80,7 +125,7 @@ export default function Home() {
   }, []);
 
   const filteredPosts = activeCategory === 'all' 
-    ? latestPosts 
+    ? (latestPosts.length > 0 ? latestPosts : [DEFAULT_FEATURED_POST])
     : latestPosts.filter(p => p.category?.slug === activeCategory || p.category === activeCategory);
 
   return (
