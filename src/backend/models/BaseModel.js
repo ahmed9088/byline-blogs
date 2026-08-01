@@ -248,11 +248,22 @@ export class SupabaseQuery {
 
       result = addMongooseMethods(result, this.tableName);
 
-      return onFulfilled(result);
+      return onFulfilled ? onFulfilled(result) : result;
     } catch (err) {
       if (onRejected) return onRejected(err);
       throw err;
     }
+  }
+
+  catch(onRejected) {
+    return this.then(null, onRejected);
+  }
+
+  finally(onFinally) {
+    return this.then(
+      res => Promise.resolve(onFinally ? onFinally() : undefined).then(() => res),
+      err => Promise.resolve(onFinally ? onFinally() : undefined).then(() => { throw err; })
+    );
   }
 
   applyFilters(q, queryObj) {
