@@ -13,8 +13,7 @@ import { CollectionPageJSONLD, BreadcrumbJSONLD } from './JSONLD';
 import BookmarkButton from './BookmarkButton';
 import { motion } from 'framer-motion';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
 
 const getCategoryIcon = (slug: string) => {
   switch (slug) {

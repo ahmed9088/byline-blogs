@@ -36,10 +36,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 
-    (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "https://bylines.dev")
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://bylines.dev"),
   title: {
     default: "Bylines.dev — Independent Technical & Editorial Publishing",
     template: "%s | Bylines.dev",

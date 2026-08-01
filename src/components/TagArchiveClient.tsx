@@ -6,8 +6,7 @@ import { postsAPI, tagsAPI } from '../services/api';
 import { Clock } from 'lucide-react';
 import SEOHead from './SEOHead';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
 
 export default function TagArchiveClient({ slug }: { slug: string }) {
   const [posts, setPosts] = useState<any[]>([]);

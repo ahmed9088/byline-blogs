@@ -3,8 +3,7 @@ import type { Metadata } from "next";
 import SEOHead from "../../components/SEOHead";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "https://bylines.dev");
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
 
 export const metadata: Metadata = {
   title: "About Us — Bylines.dev Journal",

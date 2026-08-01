@@ -2,8 +2,7 @@
 
 import React from 'react';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
 
 // 1. Organization Schema.org JSON-LD
 export function OrganizationJSONLD() {

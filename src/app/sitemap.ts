@@ -2,8 +2,7 @@ import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
 
 const getApiUrl = () => {
   const envApi = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';

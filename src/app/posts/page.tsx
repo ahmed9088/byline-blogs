@@ -2,8 +2,7 @@ import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import BlogListing from '../../components/BlogListing';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
-  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
 
 export const metadata: Metadata = {
   title: 'All Publications & Technical Essays',
