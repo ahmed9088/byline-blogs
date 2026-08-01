@@ -1,16 +1,33 @@
 import fs from 'fs';
 import path from 'path';
 import multer from 'multer';
+import os from 'os';
 
-// Ensure uploads folder exists
-const uploadDir = 'public/uploads';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// On Vercel (read-only filesystem), use /tmp for uploads
+// Locally, use public/uploads
+const isVercel = !!process.env.VERCEL;
+const uploadDir = isVercel ? path.join(os.tmpdir(), 'uploads') : 'public/uploads';
+
+// Ensure uploads folder exists (wrapped in try/catch for serverless safety)
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn('[Media] Could not create upload directory:', err.message);
 }
 
 // Multer Local Disk Storage Configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // Ensure dir exists at request time too (for serverless cold starts)
+    try {
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+    } catch (e) {
+      // Continue anyway — multer will report the error
+    }
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
@@ -47,14 +64,7 @@ export const uploadImage = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'No file uploaded' });
     }
 
-    // Default local file path format
-    // In production, if Cloudinary credentials are set up,
-    // this controller would run:
-    // const result = await cloudinary.uploader.upload(req.file.path);
-    // return res.json({ success: true, url: result.secure_url });
-
     const port = process.env.PORT || 5000;
-    // Serve file URL relative to backend host
     const fileUrl = `${req.protocol}://${req.hostname === 'localhost' ? `localhost:${port}` : req.hostname}/uploads/${req.file.filename}`;
 
     res.json({
@@ -73,9 +83,13 @@ export const uploadImage = async (req, res, next) => {
 // @access  Private/Author
 export const getMediaAssets = async (req, res, next) => {
   try {
+    if (!fs.existsSync(uploadDir)) {
+      return res.json({ success: true, media: [] });
+    }
+
     fs.readdir(uploadDir, (err, files) => {
       if (err) {
-        return res.status(500).json({ success: false, message: 'Unable to scan media files' });
+        return res.json({ success: true, media: [] });
       }
 
       const port = process.env.PORT || 5000;
@@ -83,14 +97,19 @@ export const getMediaAssets = async (req, res, next) => {
         .filter((file) => /\.(jpg|jpeg|png|gif|webp)$/i.test(file))
         .map((file) => {
           const filePath = path.join(uploadDir, file);
-          const stats = fs.statSync(filePath);
-          return {
-            fileName: file,
-            url: `${req.protocol}://${req.hostname === 'localhost' ? `localhost:${port}` : req.hostname}/uploads/${file}`,
-            size: stats.size,
-            createdAt: stats.birthtime
-          };
+          try {
+            const stats = fs.statSync(filePath);
+            return {
+              fileName: file,
+              url: `${req.protocol}://${req.hostname === 'localhost' ? `localhost:${port}` : req.hostname}/uploads/${file}`,
+              size: stats.size,
+              createdAt: stats.birthtime
+            };
+          } catch {
+            return null;
+          }
         })
+        .filter(Boolean)
         .sort((a, b) => b.createdAt - a.createdAt);
 
       res.json({ success: true, media: mediaList });
