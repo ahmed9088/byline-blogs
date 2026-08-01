@@ -18,19 +18,44 @@ function getApp() {
 // Convert Web API Request → Express mock req/res with full error handling
 function handleExpress(req: NextRequest): Promise<NextResponse> {
   return new Promise(async (resolve) => {
-    // Set a safety timeout so we never hang
+    // Safety timeout (15s)
     const timeout = setTimeout(() => {
-      console.error('[API Route] Request timed out after 25s');
+      console.error('[API Route] Request timed out after 15s:', req.url);
       resolve(NextResponse.json(
         { success: false, message: 'Request timed out' },
         { status: 504 }
       ));
-    }, 25000);
+    }, 15000);
 
     try {
       const app = await getApp();
       const url = new URL(req.url);
       
+      const resHeaders: Record<string, string> = {};
+      let resStatusCode = 200;
+      let resolved = false;
+
+      const finalize = (body: any) => {
+        if (resolved) return;
+        resolved = true;
+        clearTimeout(timeout);
+
+        const headers = new Headers();
+        for (const [k, v] of Object.entries(resHeaders)) {
+          headers.set(k, v);
+        }
+
+        if (body === null || body === undefined || body === '') {
+          resolve(new NextResponse(null, { status: resStatusCode, headers }));
+        } else if (typeof body === 'object' && !Buffer.isBuffer(body)) {
+          headers.set('content-type', 'application/json');
+          resolve(new NextResponse(JSON.stringify(body), { status: resStatusCode, headers }));
+        } else {
+          const str = Buffer.isBuffer(body) ? body.toString('utf-8') : String(body);
+          resolve(new NextResponse(str, { status: resStatusCode, headers }));
+        }
+      };
+
       // Create mock req for Express
       const mockReq: any = {
         method: req.method,
@@ -48,29 +73,18 @@ function handleExpress(req: NextRequest): Promise<NextResponse> {
         params: {},
       };
 
-      const resHeaders: Record<string, string> = {};
-      let resStatusCode = 200;
-      let resolved = false;
-
-      const finalize = (body: any) => {
-        if (resolved) return;
-        resolved = true;
-        clearTimeout(timeout);
-        const headers = new Headers();
-        for (const [k, v] of Object.entries(resHeaders)) {
-          headers.set(k, v);
+      // Parse body for POST/PUT/PATCH requests
+      if (req.method !== 'GET' && req.method !== 'HEAD') {
+        try {
+          mockReq.body = await req.json();
+        } catch {
+          mockReq.body = {};
         }
-        if (body === null || body === undefined || body === '') {
-          resolve(new NextResponse(null, { status: resStatusCode, headers }));
-        } else if (typeof body === 'object' && !Buffer.isBuffer(body)) {
-          headers.set('content-type', 'application/json');
-          resolve(new NextResponse(JSON.stringify(body), { status: resStatusCode, headers }));
-        } else {
-          const str = Buffer.isBuffer(body) ? body.toString('utf-8') : String(body);
-          resolve(new NextResponse(str, { status: resStatusCode, headers }));
-        }
-      };
+      } else {
+        mockReq.body = {};
+      }
 
+      // Create mock res object for Express
       const mockRes: any = {
         statusCode: 200,
         headersSent: false,
@@ -95,26 +109,7 @@ function handleExpress(req: NextRequest): Promise<NextResponse> {
           resStatusCode = code;
           return mockRes;
         },
-        write: (chunk: any) => {
-          // For streaming — we collect and finalize in end()
-          return true;
-        },
-        end: (chunk?: any) => {
-          finalize(chunk || '');
-        },
-        json: (data: any) => {
-          resHeaders['content-type'] = 'application/json';
-          finalize(data);
-        },
-        send: (data: any) => {
-          if (typeof data === 'object' && !Buffer.isBuffer(data)) {
-            resHeaders['content-type'] = 'application/json';
-          } else {
-            resHeaders['content-type'] = resHeaders['content-type'] || 'text/html';
-          }
-          finalize(data);
-        },
-        // Methods that compression/helmet may call
+        write: () => true,
         on: () => mockRes,
         once: () => mockRes,
         emit: () => mockRes,
@@ -122,18 +117,47 @@ function handleExpress(req: NextRequest): Promise<NextResponse> {
         flush: () => {},
       };
 
-      // Parse body for POST/PUT/PATCH requests
-      if (req.method !== 'GET' && req.method !== 'HEAD') {
-        try {
-          mockReq.body = await req.json();
-        } catch {
-          mockReq.body = {};
-        }
-      } else {
-        mockReq.body = {};
-      }
+      // Protect json(), send(), end() from being overwritten by Express prototype assignment
+      Object.defineProperty(mockRes, 'json', {
+        get() {
+          return (data: any) => {
+            resHeaders['content-type'] = 'application/json';
+            finalize(data);
+            return mockRes;
+          };
+        },
+        set() {},
+        configurable: true,
+      });
 
-      // Call Express — wrap in try/catch so crashes don't leave the promise hanging
+      Object.defineProperty(mockRes, 'send', {
+        get() {
+          return (data: any) => {
+            if (typeof data === 'object' && !Buffer.isBuffer(data)) {
+              resHeaders['content-type'] = 'application/json';
+            } else {
+              resHeaders['content-type'] = resHeaders['content-type'] || 'text/html';
+            }
+            finalize(data);
+            return mockRes;
+          };
+        },
+        set() {},
+        configurable: true,
+      });
+
+      Object.defineProperty(mockRes, 'end', {
+        get() {
+          return (chunk?: any) => {
+            finalize(chunk !== undefined ? chunk : '');
+            return mockRes;
+          };
+        },
+        set() {},
+        configurable: true,
+      });
+
+      // Execute Express app
       try {
         app(mockReq, mockRes);
       } catch (expressErr: any) {

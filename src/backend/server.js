@@ -23,7 +23,6 @@ import analyticsRoutes from './routes/analytics.js';
 import settingsRoutes from './routes/settings.js';
 import auditLogRoutes from './routes/auditlog.js';
 import sitemapRoutes from './routes/sitemap.js';
-import Post from './models/Post.js';
 
 // Ensure JWT secret is always present
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
@@ -101,14 +100,13 @@ app.get(['/health', '/api/health', '/api/backend/health'], (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date(), app: 'Bylines.dev API' });
 });
 
-
-
 // Error handler
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-if (!process.env.VERCEL) {
+// Only start standalone HTTP server if executed directly as a script (not imported in Next.js API routes)
+if (process.argv[1] && (process.argv[1].endsWith('server.js') || process.argv[1].endsWith('server'))) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
