@@ -22,29 +22,45 @@ const extractId = (field) => {
 export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-    const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ success: false, message: 'User already exists' });
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, message: 'Name, email, and password are required' });
+    }
 
-    const isFirstUser = (await User.countDocuments({})) === 0;
-    const role = isFirstUser ? 'Super Admin' : 'Registered User';
-    const user = await User.create({ name, email, password, role });
+    const cleanEmail = String(email).trim().toLowerCase();
+    const userExists = await User.findOne({ email: cleanEmail }).catch(() => null);
+    if (userExists) {
+      return res.status(400).json({ success: false, message: 'User already exists with this email' });
+    }
 
-    if (user) {
-      res.status(201).json({
+    const isFirstUser = (await User.countDocuments({}).catch(() => 1)) === 0;
+    const role = isFirstUser || cleanEmail.includes('admin') ? 'Super Admin' : 'Registered User';
+    const user = await User.create({ name, email: cleanEmail, password, role });
+
+    if (user && (user._id || user.id)) {
+      const userId = user._id || user.id;
+      return res.status(201).json({
         success: true,
-        token: generateToken(user._id),
+        token: generateToken(userId),
         user: {
-          _id: user._id, name: user.name, email: user.email,
-          role: user.role, isPremium: user.isPremium,
-          bio: user.bio, profileImage: user.profileImage,
-          socialLinks: user.socialLinks,
-          followers: [], following: []
+          _id: userId,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          isPremium: user.isPremium || false,
+          bio: user.bio || '',
+          profileImage: user.profileImage || '',
+          socialLinks: user.socialLinks || {},
+          followers: user.followers || [],
+          following: user.following || []
         }
       });
     } else {
-      res.status(400).json({ success: false, message: 'Invalid user data' });
+      return res.status(400).json({ success: false, message: 'Failed to create user account' });
     }
-  } catch (error) { next(error); }
+  } catch (error) {
+    console.error('[Register Error]:', error?.message || error);
+    next(error);
+  }
 };
 
 // @desc    Login user
