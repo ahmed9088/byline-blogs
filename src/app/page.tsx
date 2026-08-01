@@ -99,7 +99,11 @@ export default function Home() {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-        <SEOHead title="Loading Journal" />
+        <SEOHead 
+          title="Bylines Journal — Technical Publishing" 
+          description="Expert-driven engineering papers, technical journalism, and research reports covering systems architecture, AI models, cybersecurity, and design."
+        />
+        <h1 className="sr-only">Bylines Journal — Independent Technical & Editorial Publishing</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 aspect-video w-full rounded-3xl" />
@@ -122,9 +126,25 @@ export default function Home() {
   return (
     <div className="space-y-14 relative pb-10">
       <SEOHead
-        title="Premium Editorial Journal"
-        description="Expert-driven editorial journalism covering technology, culture, business, and contemporary life."
+        title="Bylines Journal — Technical & Editorial Publishing"
+        description="Expert-driven engineering papers, technical journalism, and research reports covering systems architecture, AI models, cybersecurity, and design."
       />
+
+      {/* Primary Accessible H1 for Search Engine Crawlers & Readers */}
+      <h1 className="sr-only">Bylines Journal — Independent Technical & Editorial Publishing</h1>
+
+      {/* Hero Header */}
+      <div className="border-b border-zinc-200/60 dark:border-zinc-850 pb-6 pt-2">
+        <span className="text-[10px] font-extrabold uppercase text-editorial-accent dark:text-editorial-gold tracking-widest block mb-1">
+          Independent Technical Publishing
+        </span>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-serif text-neutral-900 dark:text-neutral-50 tracking-tight">
+          Bylines Journal
+        </h2>
+        <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-serif italic mt-2 max-w-3xl leading-relaxed">
+          Expert-driven engineering papers, technical journalism, and research reports covering systems architecture, AI models, neuroscience, cybersecurity, and modern design.
+        </p>
+      </div>
 
       {/* Floating Background Glows */}
       <div className="absolute top-[-10%] left-[-15%] w-[500px] h-[500px] rounded-full bg-editorial-accent/5 dark:bg-editorial-accent/2 blur-[120px] pointer-events-none animate-blob" />

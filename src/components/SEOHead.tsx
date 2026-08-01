@@ -30,10 +30,10 @@ export default function SEOHead({
   noindex = false,
 }: SEOHeadProps) {
   useEffect(() => {
-    const siteTitle = `${title} | Byline`;
+    const siteTitle = title.includes('Bylines') ? title : `${title} | Bylines Journal`;
     document.title = siteTitle;
 
-    const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : 'https://byline.com');
+    const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : (process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev'));
 
     // Helper to set or create meta tag
     const setMeta = (nameAttr: string, attrValue: string, content: string) => {
