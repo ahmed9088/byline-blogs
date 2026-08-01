@@ -4,15 +4,20 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { categoriesAPI, postsAPI } from '../../services/api';
 import { 
-  Sparkles, Layers, BookOpen, Search, ArrowRight, 
+  Sparkles, Layers, Search, ArrowRight, 
   Cpu, Layout, Brain, Shield, LineChart, Activity, 
   Trophy, Film, Compass, Globe, Book, Atom, MapPin, 
-  Utensils, Palette 
+  Utensils, Palette, Cloud, Server, Database, Key,
+  Smartphone, Monitor, Bot, Lock, Code, Dna, Leaf,
+  Workflow, Terminal, FileCode
 } from 'lucide-react';
 import SEOHead from '../../components/SEOHead';
 import { BreadcrumbJSONLD } from '../../components/JSONLD';
 
-// Icon mapping helper for categories
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 
+  (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'https://bylines.dev');
+
+// Icon mapping helper for 30 categories
 const getCategoryIcon = (slug: string) => {
   switch (slug) {
     case 'systems-engineering': return <Cpu className="w-5 h-5 text-blue-500" />;
@@ -30,6 +35,21 @@ const getCategoryIcon = (slug: string) => {
     case 'travel-exploration': return <MapPin className="w-5 h-5 text-emerald-600" />;
     case 'food-gastronomy': return <Utensils className="w-5 h-5 text-rose-500" />;
     case 'arts-culture': return <Palette className="w-5 h-5 text-fuchsia-500" />;
+    case 'cloud-architecture': return <Cloud className="w-5 h-5 text-sky-500" />;
+    case 'devops-platform-engineering': return <Server className="w-5 h-5 text-indigo-500" />;
+    case 'database-systems': return <Database className="w-5 h-5 text-amber-600" />;
+    case 'quantum-computing': return <Atom className="w-5 h-5 text-purple-600" />;
+    case 'open-source': return <Code className="w-5 h-5 text-emerald-600" />;
+    case 'mobile-engineering': return <Smartphone className="w-5 h-5 text-rose-500" />;
+    case 'frontend-performance': return <Monitor className="w-5 h-5 text-blue-600" />;
+    case 'robotics-embedded': return <Bot className="w-5 h-5 text-orange-600" />;
+    case 'cryptography': return <Key className="w-5 h-5 text-slate-600" />;
+    case 'product-management': return <Workflow className="w-5 h-5 text-teal-600" />;
+    case 'bioinformatics': return <Dna className="w-5 h-5 text-cyan-600" />;
+    case 'climate-tech': return <Leaf className="w-5 h-5 text-green-600" />;
+    case 'data-engineering': return <Database className="w-5 h-5 text-indigo-600" />;
+    case 'developer-tooling': return <Terminal className="w-5 h-5 text-purple-500" />;
+    case 'technical-documentation': return <FileCode className="w-5 h-5 text-amber-500" />;
     default: return <Layers className="w-5 h-5 text-editorial-accent" />;
   }
 };
@@ -46,7 +66,7 @@ export default function AllCategoriesPage() {
         setLoading(true);
         const [catRes, postsRes] = await Promise.all([
           categoriesAPI.getCategories(),
-          postsAPI.getPosts({ status: 'published', limit: 100 })
+          postsAPI.getPosts({ status: 'published', limit: 150 })
         ]);
 
         if (catRes.data.success) {
@@ -80,14 +100,14 @@ export default function AllCategoriesPage() {
   return (
     <div className="min-h-screen bg-neutral-50/50 dark:bg-zinc-950 text-neutral-900 dark:text-neutral-100 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <SEOHead 
-        title="Explore All 15 Categories & Sections" 
-        description="Browse all 15 publication sections covering Systems Engineering, AI, Philosophy, Science, Design, Geopolitics, and more."
-        url="http://localhost:3000/category"
+        title="Explore All 30 Publication Sections | Bylines Journal" 
+        description="Browse 30 curated knowledge sections covering Systems Engineering, AI, Quantum Computing, Cryptography, Climate Tech, Bioinformatics, Design, and more."
+        url={`${BASE_URL}/category`}
       />
       <BreadcrumbJSONLD
         items={[
-          { name: "Home", url: "http://localhost:3000" },
-          { name: "Categories Hub", url: "http://localhost:3000/category" },
+          { name: "Home", url: BASE_URL },
+          { name: "Categories Hub", url: `${BASE_URL}/category` },
         ]}
       />
 
@@ -96,15 +116,15 @@ export default function AllCategoriesPage() {
         <div className="text-center space-y-4 max-w-3xl mx-auto pt-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-editorial-accent/10 dark:bg-editorial-gold/10 text-editorial-accent dark:text-editorial-gold text-xs font-semibold tracking-wider uppercase">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Complete Publication Index</span>
+            <span>Complete Publication Index (30 Domains)</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-serif tracking-tight text-neutral-900 dark:text-neutral-50">
-            Explore All Categories
+            Explore All 30 Categories
           </h1>
 
           <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 font-serif italic leading-relaxed">
-            Delve into 15 curated editorial sections covering deep technology, modern design, frontier science, global affairs, and lifestyle philosophy.
+            Discover technical essays, research reports, and peer-reviewed articles across 30 specialized knowledge domains.
           </p>
 
           {/* Category Search Input */}
