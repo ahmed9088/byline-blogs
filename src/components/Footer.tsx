@@ -60,9 +60,15 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
               <li>
-                <Link href="/category" className="hover:text-editorial-accent transition-colors flex items-center gap-1.5 text-editorial-accent dark:text-editorial-gold">
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>All 15 Categories</span>
+                <Link href="/daily-news" className="hover:text-editorial-accent transition-colors flex items-center gap-1.5 text-editorial-accent dark:text-editorial-gold font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Daily Wire Dispatches</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/category" className="hover:text-editorial-accent transition-colors flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-neutral-400" />
+                  <span>All 30 Knowledge Domains</span>
                 </Link>
               </li>
               <li>

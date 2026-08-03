@@ -89,6 +89,10 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 text-xs uppercase tracking-wider font-semibold text-neutral-600 dark:text-neutral-400">
             <Link href="/" className="hover:text-editorial-accent dark:hover:text-editorial-gold transition-colors">Home</Link>
+            <Link href="/daily-news" className="hover:text-editorial-accent dark:hover:text-editorial-gold transition-colors flex items-center gap-1 text-editorial-accent dark:text-editorial-gold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Daily Wire</span>
+            </Link>
             <Link href="/posts" className="hover:text-editorial-accent dark:hover:text-editorial-gold transition-colors">Latest</Link>
             {user && (
               <Link href="/feed" className="hover:text-editorial-accent dark:hover:text-editorial-gold transition-colors">Feed</Link>

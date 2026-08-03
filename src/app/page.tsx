@@ -143,8 +143,29 @@ export default function Home() {
         {/* Editorial Date & Masthead Bar */}
         <div className="flex flex-wrap items-center justify-between text-[11px] font-mono tracking-tight text-neutral-500 dark:text-neutral-400 border-b border-zinc-150 dark:border-zinc-850 pb-3">
           <span>Vol. IV · No. 32</span>
-          <span>Saturday, August 1, 2026</span>
+          <span>Monday, August 3, 2026</span>
           <span className="hidden sm:inline">Independent Technical Publishing</span>
+        </div>
+
+        {/* Daily News Briefing Ticker Ribbon */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-neutral-900 dark:bg-zinc-950 text-white border border-neutral-800 shadow-sm text-xs font-sans">
+          <div className="flex items-center gap-2.5">
+            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-editorial-accent/20 text-editorial-gold font-mono font-bold text-[9px] uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-editorial-gold animate-pulse" />
+              Daily Wire
+            </span>
+            <span className="text-[11px] font-sans text-zinc-300 font-medium truncate max-w-lg">
+              Open-Weights 14B Reasoning Models Achieve 94% MATH Benchmark · Linux 6.14 Merges Zero-Copy Sockets
+            </span>
+          </div>
+
+          <Link 
+            href="/daily-news" 
+            className="flex items-center gap-1 text-[11px] font-mono font-semibold text-editorial-gold hover:underline"
+          >
+            <span>Read Today&apos;s Dispatch</span>
+            <ArrowRight className="w-3 h-3" />
+          </Link>
         </div>
 
         {/* Primary SEO H1 & Publication Headline */}
