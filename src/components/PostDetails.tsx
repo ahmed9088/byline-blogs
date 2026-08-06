@@ -703,6 +703,13 @@ export default function PostDetails({ slug }: PostDetailsProps) {
             />
           )}
 
+          {/* Google Reader Revenue Manager (RRM) Inline CTA */}
+          {!paywallBlocked && (
+            <div className="my-6">
+              <div rrm-inline-cta="94002fa7-c2e1-4382-847b-52edf3bfac46"></div>
+            </div>
+          )}
+
           {/* Tags */}
           {!paywallBlocked && post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-8 border-t border-neutral-200/50 dark:border-neutral-900">
