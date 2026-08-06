@@ -91,6 +91,11 @@ export function ArticleJSONLD({
         "url": publisherLogo,
       },
     },
+    "isPartOf": {
+      "@type": ["Product"],
+      "name": "Bylines.dev Journal",
+      "productID": "CAowrbLMDA:openaccess"
+    },
     "articleSection": section || "General",
     "keywords": keywords ? keywords.join(", ") : undefined,
     "inLanguage": "en-US",
