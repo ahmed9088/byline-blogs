@@ -23,6 +23,8 @@ import CommentLike from './CommentLike';
 import MentionInput from './MentionInput';
 
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bylines.dev';
+
 interface PostDetailsProps {
   slug: string;
 }
@@ -499,7 +501,7 @@ export default function PostDetails({ slug }: PostDetailsProps) {
       <SEOHead 
         title={post.seo?.metaTitle || post.title} 
         description={post.seo?.metaDescription || post.summary}
-        url={`http://localhost:3000/post/${post.slug}`}
+        url={`${SITE_URL}/post/${post.slug}`}
         image={post.featuredImage}
         type="article"
         publishedTime={post.publishedAt}
@@ -511,7 +513,7 @@ export default function PostDetails({ slug }: PostDetailsProps) {
       <ArticleJSONLD
         headline={post.title}
         description={post.summary || post.title}
-        url={`http://localhost:3000/post/${post.slug}`}
+        url={`${SITE_URL}/post/${post.slug}`}
         image={post.featuredImage || "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634"}
         datePublished={post.publishedAt || new Date().toISOString()}
         dateModified={post.updatedAt || post.publishedAt || new Date().toISOString()}
@@ -521,9 +523,9 @@ export default function PostDetails({ slug }: PostDetailsProps) {
       />
       <BreadcrumbJSONLD
         items={[
-          { name: "Home", url: "http://localhost:3000" },
-          { name: post.category?.name || "Section", url: `http://localhost:3000/category/${post.category?.slug || 'all'}` },
-          { name: post.title, url: `http://localhost:3000/post/${post.slug}` },
+          { name: "Home", url: SITE_URL },
+          { name: post.category?.name || "Section", url: `${SITE_URL}/category/${post.category?.slug || 'all'}` },
+          { name: post.title, url: `${SITE_URL}/post/${post.slug}` },
         ]}
       />
 

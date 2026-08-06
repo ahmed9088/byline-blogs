@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://bylines.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.bylines.dev"),
   title: {
     default: "Bylines Journal — Independent Technical & Editorial Publishing",
     template: "%s | Bylines Journal",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     "developer journalism",
     "tech publishing",
   ],
-  authors: [{ name: "Bylines Editorial Board", url: "https://bylines.dev" }],
+  authors: [{ name: "Bylines Editorial Board", url: "https://www.bylines.dev" }],
   creator: "Bylines Journal",
   publisher: "Bylines Media",
   verification: {
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://bylines.dev",
+    url: "https://www.bylines.dev",
     siteName: "Bylines Journal",
     title: "Bylines Journal — Independent Technical & Editorial Publishing",
     description: "Expert-driven engineering papers, technical journalism, and research reports covering systems architecture, AI models, cybersecurity, and design.",
@@ -100,9 +100,9 @@ export const metadata: Metadata = {
     images: ["https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=1200&h=630&q=80"],
   },
   alternates: {
-    canonical: "https://bylines.dev",
+    canonical: "https://www.bylines.dev",
     types: {
-      "application/rss+xml": "https://bylines.dev/feed.xml",
+      "application/rss+xml": "https://www.bylines.dev/feed.xml",
     },
   },
   icons: {

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bylines.dev';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bylines.dev';
 
 const getApiUrl = () => {
   const envApi = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
@@ -36,6 +36,9 @@ export async function GET() {
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
+    const enclosureTag = post.featuredImage 
+      ? `<enclosure url="${post.featuredImage}" type="image/jpeg" />` 
+      : '';
 
     return `
     <item>
@@ -46,6 +49,7 @@ export async function GET() {
       <author><![CDATA[${author}]]></author>
       <category><![CDATA[${category}]]></category>
       <description><![CDATA[${description}]]></description>
+      ${enclosureTag}
     </item>`;
   }).join('');
 
